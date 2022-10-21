@@ -35,7 +35,7 @@ func (ma *CommentManager) CreateComment(commentRequest model.Comentario) error {
 			Mensaje:   commentRequest.Mensaje,
 		}
 
-		if err := tx.Create(&commentRequest).Error; err != nil {
+		if err := tx.Create(&newComment).Error; err != nil {
 			return err
 		}
 

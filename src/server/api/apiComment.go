@@ -24,7 +24,7 @@ func (api *ApiComment) CreateComment(c echo.Context) error {
 	err := api.manager.CreateComment(data)
 
 	if err != nil {
-		return err
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.NoContent(http.StatusOK)
@@ -34,7 +34,7 @@ func (api *ApiComment) GetAllComments(c echo.Context) error {
 	comments, err := api.manager.GetAllComments()
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, "Se produjo un error al consultar la bdd")
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, comments)
@@ -47,7 +47,7 @@ func (api *ApiComment) GetCommentsByUserIds(c echo.Context) error {
 	comments, err := api.manager.GetCommentsByUserIds(data.Ids)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, "Se produjo un error al consultar la bdd")
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, comments)
