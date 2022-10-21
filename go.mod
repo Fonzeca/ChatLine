@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/rabbitmq/amqp091-go v1.5.0
-	github.com/spf13/viper v1.13.0
 )
 
 require (
