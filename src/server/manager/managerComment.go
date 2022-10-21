@@ -1,8 +1,12 @@
 package manager
 
 import (
+	"strconv"
+
 	"github.com/Fonzeca/Chatline/src/db"
 	"github.com/Fonzeca/Chatline/src/db/model"
+	"github.com/Fonzeca/Chatline/src/services"
+	"gorm.io/gorm"
 )
 
 type CommentManager struct {
@@ -20,9 +24,24 @@ func (ma *CommentManager) CreateComment(commentRequest model.Comentario) error {
 		return err
 	}
 
-	tx := db.Create(&commentRequest)
+	transactionErr := db.Transaction(func(tx *gorm.DB) error {
 
-	return tx.Error
+		if err := tx.Create(&commentRequest).Error; err != nil {
+			return err
+		}
+
+		rabbitErr := services.ProcessData(model.ComentarioMQ{
+			UsuarioID: commentRequest.UsuarioID,
+			Fecha:     commentRequest.Fecha,
+			Tema:      commentRequest.Tema,
+			TemaId:    commentRequest.TemaID,
+			Mensaje:   commentRequest.Mensaje,
+		})
+
+		return rabbitErr
+	})
+
+	return transactionErr
 }
 
 func (ma *CommentManager) GetAllComments() ([]model.Comentario, error) {
@@ -49,6 +68,26 @@ func (ma *CommentManager) GetCommentsByUserIds(userIdsRequest []string) ([]model
 
 	comments := []model.Comentario{}
 	tx := db.Where("usuario_id IN ?", userIdsRequest).Find(&comments)
+
+	return comments, tx.Error
+}
+
+func (ma *CommentManager) GetCommentsByTopicAndTopicId(topic string, topicId string) ([]model.Comentario, error) {
+	db, close, err := db.ObtenerConexionDb()
+	defer close()
+
+	if err != nil {
+		return []model.Comentario{}, err
+	}
+
+	topicIdInt, convErr := strconv.Atoi(topicId)
+
+	if convErr != nil {
+		return []model.Comentario{}, convErr
+	}
+
+	comments := []model.Comentario{}
+	tx := db.Where("tema = ? AND tema_id = ?", topic, topicIdInt).Find(&comments)
 
 	return comments, tx.Error
 }

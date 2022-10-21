@@ -5,7 +5,6 @@ import (
 
 	"github.com/Fonzeca/Chatline/src/db/model"
 	"github.com/Fonzeca/Chatline/src/server/manager"
-	"github.com/Fonzeca/Chatline/src/services"
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,14 +27,6 @@ func (api *ApiComment) CreateComment(c echo.Context) error {
 		return err
 	}
 
-	go services.ProcessData(model.ComentarioMQ{
-		UsuarioID: data.UsuarioID,
-		Fecha:     data.Fecha,
-		Tema:      data.Tema,
-		TemaId:    data.TemaID,
-		Mensaje:   data.Mensaje,
-	})
-
 	return c.NoContent(http.StatusOK)
 }
 
@@ -54,6 +45,28 @@ func (api *ApiComment) GetCommentsByUserIds(c echo.Context) error {
 	c.Bind(&data)
 
 	comments, err := api.manager.GetCommentsByUserIds(data.Ids)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Se produjo un error al consultar la bdd")
+	}
+
+	return c.JSON(http.StatusOK, comments)
+}
+
+func (api *ApiComment) GetCommentsByTopicAndTopicId(c echo.Context) error {
+	val, paramErr := c.FormParams()
+	tema := val.Get("tema")
+	temaId := val.Get("tema_id")
+
+	if paramErr != nil {
+		return c.JSON(http.StatusBadRequest, paramErr.Error())
+	}
+
+	if tema == "" || temaId == "" {
+		return c.JSON(http.StatusBadRequest, "Ningún parametro puede estar vacío")
+	}
+
+	comments, err := api.manager.GetCommentsByTopicAndTopicId(tema, temaId)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Se produjo un error al consultar la bdd")

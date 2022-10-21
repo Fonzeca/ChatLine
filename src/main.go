@@ -28,6 +28,7 @@ func main() {
 	e.POST("/createComment", api.CreateComment)
 	e.GET("/getAllComments", api.GetAllComments)
 	e.POST("/getCommentsByUserIds", api.GetCommentsByUserIds)
+	e.GET("/getCommentsByTopicAndTopicId", api.GetCommentsByTopicAndTopicId)
 
 	e.Logger.Fatal(e.Start(":4762"))
 }

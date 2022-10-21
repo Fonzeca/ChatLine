@@ -31,7 +31,7 @@ func SetupRabbitMq() (*amqp.Channel, func()) {
 	return channelRabbitMQ, func() { connectRabbitMQ.Close(); channelRabbitMQ.Close() }
 }
 
-func ProcessData(commentMq model.ComentarioMQ) {
+func ProcessData(commentMq model.ComentarioMQ) error {
 	commentBytes, _ := jsonEncoder.Marshal(commentMq)
 	err := GlobalChannel.PublishWithContext(context.Background(), "carmind", "notification.comment.chatline.preparing", false, false, amqp.Publishing{
 		ContentType: "application/json",
@@ -39,5 +39,8 @@ func ProcessData(commentMq model.ComentarioMQ) {
 	})
 	if err != nil {
 		log.Fatalln(err)
+		return err
 	}
+
+	return nil
 }
