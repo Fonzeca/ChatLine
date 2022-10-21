@@ -27,17 +27,19 @@ func (ma *CommentManager) CreateComment(commentRequest model.Comentario) error {
 
 	transactionErr := db.Transaction(func(tx *gorm.DB) error {
 
-		if err := tx.Create(&commentRequest).Error; err != nil {
-			return err
-		}
-
-		rabbitErr := services.ProcessData(model.ComentarioMQ{
+		newComment := model.ComentarioView{
 			UsuarioID: commentRequest.UsuarioID,
 			Fecha:     time.Now(),
 			Tema:      commentRequest.Tema,
 			TemaId:    commentRequest.TemaID,
 			Mensaje:   commentRequest.Mensaje,
-		})
+		}
+
+		if err := tx.Create(&commentRequest).Error; err != nil {
+			return err
+		}
+
+		rabbitErr := services.ProcessData(newComment)
 
 		return rabbitErr
 	})
