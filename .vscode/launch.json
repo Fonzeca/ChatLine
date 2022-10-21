@@ -11,7 +11,9 @@
             "mode": "auto",
             "program": "src/main.go",
             "env": {
-                "RABBITMQ_URL" : "amqp://guest:guest@IP:4859"
+                "RABBITMQ_URL" : "amqp://guest:guest@IP:4859",
+                "CHATLINE_DB_HOST" : "blabla",
+                
             }
         }
     ]

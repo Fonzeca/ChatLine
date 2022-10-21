@@ -16,11 +16,11 @@ func ObtenerConexionDb() (*gorm.DB, func() error, error) {
 		host = "vps-1791261-x.dattaweb.com:3306"
 	}
 
-	user := os.Getenv("chatlineDbUser")
+	user := os.Getenv("CHATLINE_DB_USER")
 	if user == "" {
 		user = "root"
 	}
-	pass := os.Getenv("chatlineDbPass")
+	pass := os.Getenv("CHATLINE_DB_PASS")
 	if pass == "" {
 		pass = "almacen.C12"
 	}
