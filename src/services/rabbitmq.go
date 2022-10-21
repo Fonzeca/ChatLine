@@ -3,18 +3,18 @@ package services
 import (
 	"context"
 	"log"
+	"os"
 
 	jsonEncoder "encoding/json"
 
 	"github.com/Fonzeca/Chatline/src/db/model"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"github.com/spf13/viper"
 )
 
 func SetupRabbitMq() (*amqp.Channel, func()) {
 	// Create a new RabbitMQ connection.
 
-	connectRabbitMQ, err := amqp.Dial(viper.GetString("rabbitmq.url"))
+	connectRabbitMQ, err := amqp.Dial(os.Getenv("RABBITMQ_URL"))
 	if err != nil {
 		panic(err)
 	}
