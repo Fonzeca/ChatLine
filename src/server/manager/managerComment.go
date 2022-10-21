@@ -2,6 +2,7 @@ package manager
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/Fonzeca/Chatline/src/db"
 	"github.com/Fonzeca/Chatline/src/db/model"
@@ -32,7 +33,7 @@ func (ma *CommentManager) CreateComment(commentRequest model.Comentario) error {
 
 		rabbitErr := services.ProcessData(model.ComentarioMQ{
 			UsuarioID: commentRequest.UsuarioID,
-			Fecha:     commentRequest.Fecha,
+			Fecha:     time.Now(),
 			Tema:      commentRequest.Tema,
 			TemaId:    commentRequest.TemaID,
 			Mensaje:   commentRequest.Mensaje,
