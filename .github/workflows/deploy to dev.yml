@@ -30,7 +30,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ${{ secrets.PATH }}
-            git fetch --all && git reset --hard origin/dev && git pull origin
+            git fetch --all && git reset --hard origin/dev
       - name: Stop running container
         uses: appleboy/ssh-action@master
         continue-on-error: true
