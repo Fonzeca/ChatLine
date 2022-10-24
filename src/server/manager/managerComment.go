@@ -27,11 +27,11 @@ func (ma *CommentManager) CreateComment(commentRequest model.Comentario) error {
 
 	transactionErr := db.Transaction(func(tx *gorm.DB) error {
 
-		newComment := model.ComentarioView{
+		newComment := model.Comentario{
 			UsuarioID: commentRequest.UsuarioID,
-			Fecha:     time.Now(),
+			Fecha:     time.Now().Add(-time.Hour * 3),
 			Tema:      commentRequest.Tema,
-			TemaId:    commentRequest.TemaID,
+			TemaID:    commentRequest.TemaID,
 			Mensaje:   commentRequest.Mensaje,
 		}
 
