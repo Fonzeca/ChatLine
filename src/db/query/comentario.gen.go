@@ -29,6 +29,7 @@ func newComentario(db *gorm.DB) comentario {
 	_comentario.ALL = field.NewAsterisk(tableName)
 	_comentario.ID = field.NewInt32(tableName, "id")
 	_comentario.UsuarioID = field.NewInt32(tableName, "usuario_id")
+	_comentario.Usuario = field.NewString(tableName, "usuario")
 	_comentario.Fecha = field.NewTime(tableName, "fecha")
 	_comentario.Tema = field.NewString(tableName, "tema")
 	_comentario.Mensaje = field.NewString(tableName, "mensaje")
@@ -45,6 +46,7 @@ type comentario struct {
 	ALL       field.Asterisk
 	ID        field.Int32
 	UsuarioID field.Int32
+	Usuario   field.String
 	Fecha     field.Time
 	Tema      field.String
 	Mensaje   field.String
@@ -67,6 +69,7 @@ func (c *comentario) updateTableName(table string) *comentario {
 	c.ALL = field.NewAsterisk(table)
 	c.ID = field.NewInt32(table, "id")
 	c.UsuarioID = field.NewInt32(table, "usuario_id")
+	c.Usuario = field.NewString(table, "usuario")
 	c.Fecha = field.NewTime(table, "fecha")
 	c.Tema = field.NewString(table, "tema")
 	c.Mensaje = field.NewString(table, "mensaje")
@@ -87,9 +90,10 @@ func (c *comentario) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *comentario) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 6)
+	c.fieldMap = make(map[string]field.Expr, 7)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["usuario_id"] = c.UsuarioID
+	c.fieldMap["usuario"] = c.Usuario
 	c.fieldMap["fecha"] = c.Fecha
 	c.fieldMap["tema"] = c.Tema
 	c.fieldMap["mensaje"] = c.Mensaje

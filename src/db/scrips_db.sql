@@ -1,2 +1,4 @@
 CREATE TABLE `chatline`.`comentario` ( `id` INT NOT NULL AUTO_INCREMENT ,  `usuario_id` INT NOT NULL ,  `fecha` DATETIME NOT NULL ,  `tema` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,  `mensaje` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,    PRIMARY KEY  (`id`)) ENGINE = InnoDB;
 ALTER TABLE `comentario` ADD `tema_id` INT NOT NULL AFTER `mensaje`;
+ALTER TABLE `comentario` CHANGE `mensaje` `mensaje` VARCHAR(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `comentario` ADD `usuario` VARCHAR(101) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `usuario_id`;

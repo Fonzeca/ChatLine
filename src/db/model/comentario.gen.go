@@ -14,6 +14,7 @@ const TableNameComentario = "comentario"
 type Comentario struct {
 	ID        int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
 	UsuarioID int32     `gorm:"column:usuario_id;not null" json:"usuario_id"`
+	Usuario   string    `gorm:"column:usuario;not null" json:"usuario"`
 	Fecha     time.Time `gorm:"column:fecha;not null" json:"fecha"`
 	Tema      string    `gorm:"column:tema;not null" json:"tema"`
 	Mensaje   string    `gorm:"column:mensaje;not null" json:"mensaje"`
